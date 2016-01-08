@@ -50,7 +50,8 @@ function cowCal(remoteUTCOffset, month, year, firstDayofWeek) {
 }
 
 cowCal.prototype.cowMonth = function() {
-    var htmlOutput = '<table class="cowCal-month">';
+    var htmlOutput = '<h3>' + this.nameOfMonth + '</h3>';
+    htmlOutput += '<table class="cowCal-month">';
     htmlOutput += '<tr>';
     this.firstDayofWeek = this.firstDayofWeek + 1;
     this.firstDayofMonth = this.firstDayofMonth - this.firstDayofWeek;
