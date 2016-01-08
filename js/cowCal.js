@@ -4,10 +4,6 @@
  * License: MIT
  */
 
-function isInArray(value, array) {
-  return array.indexOf(value) > -1;
-}
-
 /*
  * Here's something fun to blow minds. Below is the conversion function for timezones.
  * Because the server (this was originally built for WordPress) has a different saved
@@ -24,11 +20,9 @@ function convertTimezone(remoteUTCOffset) {
     // Handle our local time
     var localTime = new Date();
     var localUTC = localTime.getTime() + (localTime.getTimezoneOffset() * 60000);
-    console.log(localTime.getHours() + ':' + localTime.getMinutes() + ':' + localTime.getSeconds());
 
     // Handle our desired time (from our settings page)
     var remoteTime = new Date(localUTC + (remoteUTCOffset * 1000));
-    console.log(remoteTime.getHours() + ':' + remoteTime.getMinutes() + ':' + remoteTime.getSeconds());
 
     // Return our converted time
     return remoteTime;
@@ -55,9 +49,8 @@ function cowCal(remoteUTCOffset, month, year, firstDayofWeek) {
     this.nameOfMonth = cowNamesOfMonths[this.month];
 }
 
-cowCal.prototype.month = function() {
-    var htmlOutput;
-    htmlOutput += '<table class="cowCal-month">';
+cowCal.prototype.cowMonth = function() {
+    var htmlOutput = '<table class="cowCal-month">';
     htmlOutput += '<tr>';
     var i = this.firstDayofWeek;
 
@@ -105,7 +98,6 @@ cowCal.prototype.month = function() {
     htmlOutput += '</tr>';
     htmlOutput += '</table>';
 
-    // Make htmlOutput part of the prototype/object
-    this.htmlOutput = htmlOutput;
+    return htmlOutput;
 }
             
