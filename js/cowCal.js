@@ -52,35 +52,32 @@ function cowCal(remoteUTCOffset, month, year, firstDayofWeek) {
 cowCal.prototype.cowMonth = function() {
     var htmlOutput = '<table class="cowCal-month">';
     htmlOutput += '<tr>';
-    var i = this.firstDayofWeek;
 
     // Generate our labels for the days of the week
     if (i > 0) {
-        for (i < 7; i++;) {
+        for (var i = this.firstDayofWeek; i < 7; i++) {
             htmlOutput += '<th>' + this.namesOfDays[i] + '</th>';
         }
-        var i = 0;
-        for (i < this.firstDayofWeek; i++;) {
+        for (var i = 0; i < this.firstDayofWeek; i++) {
             htmlOutput += '<th>' + this.namesOfDays[i] + '</th>';
         }
     }
     else
     {
-        console.log(i);
-        htmlOutput += '<th>' + this.namesOfDays[i] + '</th>';
+        for (var i = this.firstDayofWeek; i < 7; i++) {
+            htmlOutput += '<th>' + this.namesOfDays[i] + '</th>';
+        }
     }
     htmlOutput += '</tr>';
     
     // Generate our actual days in the month
     var dayNumber = 1;
-    var week = 0;
-    var dayPosition = 0;
 
-    for (week < 9; week++;) {
+    for (var week = 0; week < 9; week++) {
         htmlOutput += '<tr>';
-        for (dayPosition <= 6; dayPosition++;) {
+        for (var dayPosition = 0; dayPosition <= 6; dayPosition++) {
             htmlOutput += '<td>';
-            if ((dayNumber <= this.daysInMonth) && (week > 0 || dayPosition >= this.firstDayofWeek)) {
+            if ((dayNumber <= this.daysInMonth) && (week > 0 || dayPosition >= this.firstDayofMonth)) {
                 htmlOutput += dayNumber;
                 dayNumber++;
             }
