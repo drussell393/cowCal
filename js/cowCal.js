@@ -8,14 +8,28 @@ function isInArray(value, array) {
   return array.indexOf(value) > -1;
 }
 
+/*
+ * Here's something fun to blow minds. Below is the conversion function for timezones.
+ * Because the server (this was originally built for WordPress) has a different saved
+ * timezone from our local timezone in some cases, we want to be able to change everything
+ * to the remote timezone. Here's the problem with that:
+ *
+ * - PHP uses seconds using the DateTimeZone class.
+ * - Javascript uses seconds, minutes, and milliseconds mixed in. Date.prototype.getTime()
+ *   is using milliseconds, while Date.prototype.getTimezoneOffset() uses minutes. In order
+ *   to keep everything sane, we're going to convert everything to milliseconds.
+ */
+ 
 function convertTimezone(remoteUTCOffset) {
     // Handle our local time
     var localTime = new Date();
     var localUTC = localTime.getTime() + (localTime.getTimezoneOffset() * 60000);
+    console.log(localTime.getHours() + ':' + localTime.getMinutes() + ':' + localTime.getSeconds());
 
     // Handle our desired time (from our settings page)
-    var remoteTime = new Date(localUTC + (3600000 * remoteUTCOffset));
-    
+    var remoteTime = new Date(localUTC + (remoteUTCOffset * 1000));
+    console.log(remoteTime.getHours() + ':' + remoteTime.getMinutes() + ':' + remoteTime.getSeconds());
+
     // Return our converted time
     return remoteTime;
 }
@@ -29,7 +43,7 @@ function cowCal(remoteUTCOffset, month, year, firstDayofWeek) {
     var cowNamesOfMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     this.month = ((isNaN(month) || month == null) ? currentTime.getMonth() : month);
     this.year = ((isNaN(year) || year == null) ? currentTime.getFullYear() : year);
-    this.firstDayofWeek = ((isNaN(firstDayofWeek) || firstDayofWeek == null) ? 0 : firstDayofWeek)
+    this.firstDayofWeek = ((isNaN(firstDayofWeek) || firstDayofWeek == null) ? 0 : firstDayofWeek);
     // Check for leap years
     if (((this.year % 4) == 0) || ((this.year % 100) == 0) && ((this.year % 400) == 0)) {
         var cowDaysInMonths = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -89,7 +103,7 @@ cowCal.prototype.month = function() {
         }
     }
     htmlOutput += '</tr>';
-    htmlOutput += '</table';
+    htmlOutput += '</table>';
 
     // Make htmlOutput part of the prototype/object
     this.htmlOutput = htmlOutput;
