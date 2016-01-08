@@ -52,9 +52,11 @@ function cowCal(remoteUTCOffset, month, year, firstDayofWeek) {
 cowCal.prototype.cowMonth = function() {
     var htmlOutput = '<table class="cowCal-month">';
     htmlOutput += '<tr>';
+    this.firstDayofWeek = this.firstDayofWeek + 1;
+    this.firstDayofMonth = this.firstDayofMonth - this.firstDayofWeek;
 
     // Generate our labels for the days of the week
-    if (i > 0) {
+    if (this.firstDayofWeek > 0) {
         for (var i = this.firstDayofWeek; i < 7; i++) {
             htmlOutput += '<th>' + this.namesOfDays[i] + '</th>';
         }
