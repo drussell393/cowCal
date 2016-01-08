@@ -99,4 +99,12 @@ cowCal.prototype.cowMonth = function() {
 
     return htmlOutput;
 }
-            
+
+function cowGenerate12Months(remoteUTCOffset, year, firstDayofWeek) {
+    var htmlOutput = '';
+    for (var i = 0; i < 12; i++) {
+        var generateCalendar = new cowCal(remoteUTCOffset, i, year, firstDayofWeek);
+        htmlOutput += generateCalendar.cowMonth();
+    }
+    return htmlOutput;
+}
