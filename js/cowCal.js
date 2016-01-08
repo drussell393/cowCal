@@ -28,7 +28,7 @@ function convertTimezone(remoteUTCOffset) {
     return remoteTime;
 }
 
-function cowCal(remoteUTCOffset, month, year, firstDayofWeek) {
+function cowCal(remoteUTCOffset, month, year) {
     // Get our current date/time
     var currentTime = convertTimezone(remoteUTCOffset);
 
@@ -37,7 +37,6 @@ function cowCal(remoteUTCOffset, month, year, firstDayofWeek) {
     var cowNamesOfMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     this.month = ((isNaN(month) || month == null) ? currentTime.getMonth() : month);
     this.year = ((isNaN(year) || year == null) ? currentTime.getFullYear() : year);
-    this.firstDayofWeek = ((isNaN(firstDayofWeek) || firstDayofWeek == null) ? 0 : firstDayofWeek);
     // Check for leap years
     if (((this.year % 4) == 0) || ((this.year % 100) == 0) && ((this.year % 400) == 0)) {
         var cowDaysInMonths = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -53,23 +52,10 @@ cowCal.prototype.cowMonth = function() {
     var htmlOutput = '<h3>' + this.nameOfMonth + '</h3>';
     htmlOutput += '<table class="cowCal-month">';
     htmlOutput += '<tr>';
-    this.firstDayofWeek = this.firstDayofWeek + 1;
-    this.firstDayofMonth = this.firstDayofMonth - this.firstDayofWeek;
 
     // Generate our labels for the days of the week
-    if (this.firstDayofWeek > 0) {
-        for (var i = this.firstDayofWeek; i < 7; i++) {
-            htmlOutput += '<th>' + this.namesOfDays[i] + '</th>';
-        }
-        for (var i = 0; i < this.firstDayofWeek; i++) {
-            htmlOutput += '<th>' + this.namesOfDays[i] + '</th>';
-        }
-    }
-    else
-    {
-        for (var i = this.firstDayofWeek; i < 7; i++) {
-            htmlOutput += '<th>' + this.namesOfDays[i] + '</th>';
-        }
+    for (var i = 0; i < 7; i++) {
+        htmlOutput += '<th>' + this.namesOfDays[i] + '</th>';
     }
     htmlOutput += '</tr>';
     
@@ -101,10 +87,10 @@ cowCal.prototype.cowMonth = function() {
     return htmlOutput;
 }
 
-function cowGenerate12Months(remoteUTCOffset, year, firstDayofWeek) {
+function cowGenerate12Months(remoteUTCOffset, year) {
     var htmlOutput = '';
     for (var i = 0; i < 12; i++) {
-        var generateCalendar = new cowCal(remoteUTCOffset, i, year, firstDayofWeek);
+        var generateCalendar = new cowCal(remoteUTCOffset, i, year);
         htmlOutput += generateCalendar.cowMonth();
     }
     return htmlOutput;
