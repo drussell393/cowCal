@@ -1,0 +1,46 @@
+/*
+ * cowCal CSS
+ * Author: Dave Russell Jr (drussell393)
+ */
+
+html {
+    body {
+        div#cowCal {
+            div.cowCal-yearSwitcher {
+                text-align: center;
+                input {
+                    width: 60px;
+                    text-align: center;
+                }
+                span.left-nav, span.right-nav {
+                    display: inline-block;
+                    border-top: 7px solid transparent;
+                    border-bottom: 7px solid transparent;
+                    cursor: pointer;
+                }
+                span.left-nav {
+                    border-right: 7px solid #222222;
+                }
+                span.right-nav {
+                    border-left: 7px solid #222222;
+                }
+            }
+            div#cowCal-12months {
+                margin-top: 50px;
+                div.cowCal-month {
+                    z-index: -1;
+                    display: inline-block;
+                    width: 25%;
+                    margin: 1% 0 4% 5.5%;
+                    .holidayChooser {
+                        display: none;
+                        position: absolute;
+                        z-index: 100;
+                        padding: 20px;
+                        width: 200px;
+                    }
+                }
+            }
+        }
+    }
+}

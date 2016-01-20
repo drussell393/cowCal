@@ -48,9 +48,40 @@ function cowCal(remoteUTCOffset, month, year) {
     this.nameOfMonth = cowNamesOfMonths[this.month];
 }
 
-cowCal.prototype.cowMonth = function() {
-    var htmlOutput = '<h3>' + this.nameOfMonth + '</h3>';
-    htmlOutput += '<table class="cowCal-month">';
+cowCal.prototype.cowHolidayChooser = function(phpAction) {
+    jQuery('td.cowDay').click(function() {
+        console.log('test');
+        jQuery.ajax({
+            type: 'POST',
+            url: phpAction,
+            data: jQuery(this).data('date'),
+            success: function(msg) {
+                jQuery(this).find('.holidayChooser .isHoliday').prop('checked', msg[0]);
+                jQuery(this).find('.holidayChooser .isRepeating').prop('checked', msg[1]);
+                jQuery(this).find('.holidayChooser').show();
+            }
+        });
+    });
+}
+
+cowCal.prototype.cowClickSubmit = function(phpAction, element) {
+    jQuery(element).on('click', function() {
+        this.preventDefault();
+        jQuery.ajax({
+            type: 'POST',
+            url: phpAction,
+            data: jQuery(element).serialize(),
+            success: function() {
+                jQuery('successMsg').show();
+            }
+        });
+    });
+}
+
+cowCal.prototype.cowMonth = function(holidayChooser) {
+    var htmlOutput = '<div class="cowCal-month">';
+    htmlOutput += '<h3>' + this.nameOfMonth + '</h3>';
+    htmlOutput += '<table>';
     htmlOutput += '<tr>';
 
     // Generate our labels for the days of the week
@@ -65,9 +96,17 @@ cowCal.prototype.cowMonth = function() {
     for (var week = 0; week < 9; week++) {
         htmlOutput += '<tr>';
         for (var dayPosition = 0; dayPosition <= 6; dayPosition++) {
-            htmlOutput += '<td>';
+            htmlOutput += '<td class="cowDay" data-date="' + this.month + dayNumber + this.year + '">';
             if ((dayNumber <= this.daysInMonth) && (week > 0 || dayPosition >= this.firstDayofMonth)) {
                 htmlOutput += dayNumber;
+                if (holidayChooser == true) {
+                    htmlOutput += '<div class="holidayChooser">';
+                    htmlOutput += '<label for="isHoliday">Holiday?</label>';
+                    htmlOutput += '<input type="checkbox" value="1" class="isHoliday" id="isHoliday" />';
+                    htmlOutput += '<label for="isRepeating">Repeats every year?</label>';
+                    htmlOutput += '<input type="checkbox" value="1" class="isRepeating" id="isRepeating" />';
+                    htmlOutput += '</div>'; 
+                }
                 dayNumber++;
             }
             htmlOutput += '</td>';
@@ -83,15 +122,22 @@ cowCal.prototype.cowMonth = function() {
     }
     htmlOutput += '</tr>';
     htmlOutput += '</table>';
+    htmlOutput += '</div>';
 
     return htmlOutput;
 }
 
-function cowGenerate12Months(remoteUTCOffset, year) {
+function cowGenerate12Months(remoteUTCOffset, year, holidayChooser, phpAction) {
     var htmlOutput = '';
     for (var i = 0; i < 12; i++) {
         var generateCalendar = new cowCal(remoteUTCOffset, i, year);
-        htmlOutput += generateCalendar.cowMonth();
+        htmlOutput += generateCalendar.cowMonth(holidayChooser);
+    }
+    if (holidayChooser = true) {
+        jQuery(document).ready(function() {
+            generateCalendar.cowHolidayChooser(phpAction);
+        });
     }
     return htmlOutput;
 }
+
